@@ -2,6 +2,12 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+axios.get("https://api.github.com/users/BryanKAdams").then(response => {
+  console.log(response);
+  const newGit = card(response.data)
+  entryPoint.appendChild(newGit)
+})
+const entryPoint = document.querySelector(".cards");
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -45,6 +51,49 @@ const followersArray = [];
 </div>
 
 */
+function card(item){
+  const newCard = document.createElement("div"),
+  newImage = document.createElement("img"),
+  cardInfo = document.createElement("div"),
+  nameHeader = document.createElement("h3"),
+  userName = document.createElement("p"),
+  profile = document.createElement("p"),
+  location = document.createElement("p"),
+  urlToGit = document.createElement("a"),
+  followers = document.createElement("p"),
+  following = document.createElement("p"),
+  bio = document.createElement("p");
+
+  // appending parts together
+  newCard.appendChild(newImage);
+  newCard.appendChild(cardInfo);
+  cardInfo.appendChild(nameHeader);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(urlToGit);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  // adding class names
+newCard.classList.add("card");
+cardInfo.classList.add("card-info");
+nameHeader.classList.add("name");
+userName.classList.add("username");
+// content
+newImage.src = item.avatar_url;
+nameHeader.textContent = item.name;
+userName.textContent = item.login;
+location.textContent = 'Location' + item.location;
+urlToGit.textContent = 'Profile: ' + item.html_url;
+followers.textContent = 'Followers: ' + item.followers;
+following.textContent = 'Following: ' + item.following;
+bio.textContent = 'bio: ' + item.bio;
+  
+  
+  return newCard;
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
