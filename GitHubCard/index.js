@@ -4,6 +4,8 @@
 */
 
 const entryPoint = document.querySelector(".cards");
+const followersSelector = document.querySelector(".cards");
+
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -19,7 +21,7 @@ axios.get("https://api.github.com/users/bryankadams")
     console.log(response);
   })
   .catch(error => {
-    console.log(error);
+    console.log(error.message);
   })
 
 /* Step 4: Pass the data received from Github into your function, 
@@ -35,7 +37,7 @@ axios.get("https://api.github.com/users/bryankadams")
           Using that array, iterate over it, requesting data for each user, creating a new card for each
           user, and adding that card to the DOM.
 */
-const followersArray = ['tetondan'];
+const followersArray = [];
 axios.get("https://api.github.com/users/bryankadams/followers").then(response => {
   response.data.map(item => {
     followersArray.push(item.login)
@@ -43,7 +45,7 @@ axios.get("https://api.github.com/users/bryankadams/followers").then(response =>
 })
 
 
-function invokeAll(array){
+function passGits(array){
   array.map(item => {
     axios.get("https://api.github.com/users/" + item).then(response => {
       const newGit = card(response.data);
@@ -51,7 +53,14 @@ function invokeAll(array){
     })
   })
 }
+if(entryPoint.hasChildNodes){
+  entryPoint.addEventListener("click", () => {
+    setTimeout(passGits, 500, followersArray)
+  });
 
+  // setTimeout(passGits, 500, followersArray);
+  
+}
 
 
 
@@ -108,7 +117,7 @@ function card(item) {
   newImage.src = item.avatar_url;
   nameHeader.textContent = item.name;
   userName.textContent = item.login;
-  location.textContent = 'Location' + item.location;
+  location.textContent = 'Location: ' + item.location;
   urlToGit.textContent = 'Profile: ' + item.html_url;
   urlToGit.href = item.html_url;
   followers.textContent = 'Followers: ' + item.followers;
@@ -118,7 +127,7 @@ function card(item) {
 
   return newCard;
 }
-setTimeout(invokeAll, 5, followersArray);
+// setTimeout(passGits, 500, followersArray);
 
 
 /* List of LS Instructors Github username's:
